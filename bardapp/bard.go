@@ -157,11 +157,13 @@ func (bard *BardClient) parsePostResponse(res *http.Response){
     payloadObj := make([]interface{}, 0)
     utils.PanicOnError(json.Unmarshal([]byte(msgObj[2].(string)), &payloadObj))
 
-    utils.PrintObj(payloadObj)
-
     basicIds := payloadObj[1].([]interface{})
     bard.conversationId = basicIds[0].(string)
     bard.responseId = basicIds[1].(string)
+
+    if payloadObj[2] == nil{
+        panic(fmt.Sprintf("[-] Bard do not support the language for '%s'", bard.lastMessageSent))
+    }
 
     userInputs := payloadObj[2].([]interface{})
     bard.interpretedMessage = userInputs[0].([]interface{})[0].(string)
