@@ -157,6 +157,8 @@ func (bard *BardClient) parsePostResponse(res *http.Response){
     payloadObj := make([]interface{}, 0)
     utils.PanicOnError(json.Unmarshal([]byte(msgObj[2].(string)), &payloadObj))
 
+    utils.PrintObj(payloadObj)
+
     basicIds := payloadObj[1].([]interface{})
     bard.conversationId = basicIds[0].(string)
     bard.responseId = basicIds[1].(string)
@@ -166,7 +168,7 @@ func (bard *BardClient) parsePostResponse(res *http.Response){
 
     bardResponse := payloadObj[4].([]interface{})
 
-    for i := 0; i < 3; i++{
+    for i := 0; i < len(bardResponse); i++{
         responseArray := bardResponse[i].([]interface{})
         choiceId := responseArray[0].(string)
         responseText := responseArray[1].([]interface{})[0].(string)
