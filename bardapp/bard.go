@@ -74,6 +74,10 @@ func (bard *BardClient) FetchInfo(){
 
     bard.SNlM0e = utils.GetParams(regexp.MustCompile(`"SNlM0e":"(?P<SNlM0e>[^\"]*)",`), string(respBodyBytes))["SNlM0e"]
     fmt.Printf("[+] Found 'SNlM0e' value: '%s'\n", bard.SNlM0e)
+
+    if bard.SNlM0e == "" || len(bard.SNlM0e) > 200{
+        panic("[-] 'SNlM0e' value should not be empty or too large (Is your session token correct?)")
+    }
 }
 
 func (bard *BardClient) SendMessage(userMessage string){
