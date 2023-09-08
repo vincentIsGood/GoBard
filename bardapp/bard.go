@@ -74,10 +74,6 @@ func (bard *BardClient) FetchInfo(){
     respBodyBytes, err := io.ReadAll(res.Body)
     utils.PanicOnError(err)
 
-    if strings.Contains(string(respBodyBytes), "SNlM0e"){
-        fmt.Printf("[+] Found 'SNlM0e'")
-    }
-
     bard.SNlM0e = utils.GetParams(regexp.MustCompile(`"SNlM0e":"(?P<SNlM0e>[^\"]*)",`), string(respBodyBytes))["SNlM0e"]
     fmt.Printf("[+] Found 'SNlM0e' value: '%s'\n", bard.SNlM0e)
 
