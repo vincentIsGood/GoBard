@@ -9,9 +9,12 @@ import (
 
 func main(){
     infoCommand := flag.NewFlagSet("info", flag.ContinueOnError)
-    sessionForInfo := infoCommand.String("session", "", "'__Secure-1PSID' cookie from google")
+    session1ForInfo := infoCommand.String("session1", "", "'__Secure-1PSID' cookie from google")
+    session2ForInfo := infoCommand.String("session2", "", "'__Secure-1PSIDTS' cookie from google")
+
     chatCommand := flag.NewFlagSet("chat", flag.ContinueOnError)
-    sessionForChat := chatCommand.String("session", "", "'__Secure-1PSID' cookie from google")
+    session1ForChat := chatCommand.String("session1", "", "'__Secure-1PSID' cookie from google")
+    session2ForChat := chatCommand.String("session2", "", "'__Secure-1PSIDTS' cookie from google")
     messageForChat := chatCommand.String("text", "こんにちは", "your message to bard")
 
     if len(os.Args) == 1{
@@ -21,11 +24,11 @@ func main(){
     switch os.Args[1]{
     case "info":
         infoCommand.Parse(os.Args[2:])
-        bard := bardapp.New(*sessionForInfo)
+        bard := bardapp.New(*session1ForInfo, *session2ForInfo)
         bard.FetchInfo()
     case "chat":
         chatCommand.Parse(os.Args[2:])
-        bard := bardapp.New(*sessionForChat)
+        bard := bardapp.New(*session1ForChat, *session2ForChat)
         bard.FetchInfo()
         bard.SendMessage(*messageForChat)
         bard.PrintResponses()

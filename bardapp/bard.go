@@ -40,10 +40,11 @@ type BardClient struct{
     lastResponses map[string](*BardResponse)
 }
 
-func New(sessionId string) *BardClient{
-    fmt.Printf("[*] Using session id '%s' for Bard\n", sessionId)
+func New(sessionId1 string, sessionId2 string) *BardClient{
+    fmt.Printf("[*] Using session ids ['%s', '%s'] for Bard\n", sessionId1, sessionId2)
     client := httpclient.New()
-    client.AddCookie(BARD_URL, "__Secure-1PSID", sessionId)
+    client.AddCookie(BARD_URL, "__Secure-1PSID", sessionId1)
+    client.AddCookie(BARD_URL, "__Secure-1PSIDTS", sessionId2)
 
     reqId, _ := strconv.Atoi(utils.RandomChoices(strings.Split("0123456789", ""), 6))
 
@@ -68,9 +69,14 @@ func (bard *BardClient) FetchInfo(){
     res, err := bard.client.SendRequest("GET", BARD_URL)
     utils.PanicOnError(err)
     defer res.Body.Close()
+    fmt.Printf("[*] Received status: %d\n", res.StatusCode)
 
     respBodyBytes, err := io.ReadAll(res.Body)
     utils.PanicOnError(err)
+
+    if strings.Contains(string(respBodyBytes), "SNlM0e"){
+        fmt.Printf("[+] Found 'SNlM0e'")
+    }
 
     bard.SNlM0e = utils.GetParams(regexp.MustCompile(`"SNlM0e":"(?P<SNlM0e>[^\"]*)",`), string(respBodyBytes))["SNlM0e"]
     fmt.Printf("[+] Found 'SNlM0e' value: '%s'\n", bard.SNlM0e)
