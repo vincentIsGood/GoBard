@@ -50,7 +50,7 @@ func New(sessionId1 string, sessionId2 string) *BardClient{
 
     bard := &BardClient{
         client: client,
-        model: "boq_assistant-bard-web-server_20230627.10_p1",
+        model: "boq_assistant-bard-web-server_20231107.09_p0",
         reqId: reqId,
         conversationId: "",
         responseId: "",
